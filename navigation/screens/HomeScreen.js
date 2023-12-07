@@ -24,8 +24,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const App = () => {
 
   const [list, setList] = useState([]);
+  const [pro, setPro] = useState([]);
   const [list_OD, setList_OD] = useState([])
   const [visible, setVisible] = useState(false);
+  const [visible_Pro, setVisible_Pro] = useState(false);
   const [visible_OD, setVisible_OD] = useState(false);
   const [visible_List_OD, setVisible_List_OD] = useState(false);
 
@@ -55,7 +57,7 @@ const App = () => {
     setRefresh(true)
 
     axios({
-      url: "http:/192.168.59.88:5555/ds_dondat",
+      url: "http:/192.168.2.32:5555/ds_dondat",
       method: "GET"
       }).then((res)=>{
           setList(res.data)
@@ -75,7 +77,7 @@ const App = () => {
   }, [])
   const getList = () => {
     axios({
-      url: "http:/192.168.59.88:5555/ds_dondat",
+      url: "http:/192.168.2.32:5555/ds_dondat",
       method: "GET" 
     }).then((res)=>{
         // var response = res.data;
@@ -88,9 +90,21 @@ const App = () => {
     })
   }
 
+  const getPro = () => {
+    axios({
+      url: "http:/192.168.2.32:5555/dssanpham",
+      method: "GET" 
+    }).then((res)=>{
+        setPro(res.data)
+    }).catch(function(err)
+    {
+      console.log(err + ' getPro');
+    })
+  }
+
   const handleDelete = (item) =>{
     axios({
-      url: "http:/192.168.59.88:5555/ds_dondat/delete?o_id=" + item.o_id,
+      url: "http:/192.168.2.32:5555/ds_dondat/delete?o_id=" + item.o_id,
       method: "DELETE" 
     }).then((res)=>{
         getList();
@@ -114,7 +128,7 @@ const App = () => {
   
       console.log(orders);
       axios({
-        url: "http:/192.168.59.88:5555/ds_dondat/add",
+        url: "http:/192.168.2.32:5555/ds_dondat/add",
         method: "POST",
         data : orders,
         headers: {
@@ -147,7 +161,7 @@ const App = () => {
   
       console.log(orders);
       axios({
-        url: "http:/192.168.59.88:5555/ds_dondat/edit",
+        url: "http:/192.168.2.32:5555/ds_dondat/edit",
         method: "POST",
         data : orders,
         headers: {
@@ -172,7 +186,7 @@ const App = () => {
   const get_List_OD = (item)=>{
     const od_o_id = item.o_id;
     axios({
-      url: "http:/192.168.59.88:5555/chitietdondatt?o_id=" + od_o_id,
+      url: "http:/192.168.2.32:5555/chitietdondatt?o_id=" + od_o_id,
       method: "GET"
     }).then((res)=>{
       setList_OD(res.data)
@@ -225,7 +239,7 @@ const App = () => {
     console.log(od);
 
     axios({
-      url: "http:/192.168.59.88:5555/themchitietdondat_OD",
+      url: "http:/192.168.2.32:5555/themchitietdondat_OD",
         method: "POST",
         data : od,
         headers: {
@@ -253,7 +267,7 @@ const App = () => {
     console.log(od_price);
     console.log(o_cost);
     axios({
-      url: "http:/192.168.59.88:5555/chitietdondatt/delete?od_id=" 
+      url: "http:/192.168.2.32:5555/chitietdondatt/delete?od_id=" 
       + od_id 
       + "&od_o_id=" + od_o_id
       + "&od_price=" + od_price
@@ -283,6 +297,11 @@ const App = () => {
     set_o_br_id(1);
     setVisible(!visible);
     set_hideId(null)
+  }
+
+  const handleVisiblePro = () =>{
+    getPro();
+    setVisible_Pro(!visible_Pro);
   }
 
   const handleVisibleModal_OD = () =>{
@@ -322,8 +341,56 @@ const App = () => {
         </TouchableOpacity>
 
       </View>
+
+      <View style={styles.viewSanPham}>
+        <TouchableOpacity
+          onPress={handleVisiblePro}
+          style={styles.btnSanPham}
+        >
+          <Text style={styles.textSanPham}>Sản Phẩm</Text>
+        </TouchableOpacity>
+      </View>
       
-     
+      <Modal
+        animationType='slide'
+        visible={visible_Pro}
+        style={styles.form}
+      >
+        <SafeAreaView>
+          <View style={styles.form}>
+            <Text
+              style = {styles.label}
+            > Sản Phẩm</Text>
+
+            <ScrollView style={styles.sv_bottom}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing = {refresh}
+                        onRefresh = {()=>pullMe()}
+                      />
+                    }
+                  >
+                    {pro?.map((item, index) => {
+                      return (
+                        <View style={styles.item_product} key={index}>
+                          <View>
+                            <Text style={styles.txt_item}>{item.pro_id}</Text>
+                            <Text style={styles.txt_name}>{item.pro_name}</Text>
+                            <Text style={styles.txt_name}>{item.pp_price}</Text>
+                          </View>
+                        </View>
+                      )
+                })}
+              </ScrollView>
+
+            <TouchableOpacity
+              onPress={handleVisiblePro}
+            >
+              <Text style={styles.txtClose}>Đóng</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </Modal>
 
       <Modal
         animationType='slide'
@@ -400,7 +467,7 @@ const App = () => {
               style={styles.btnContainer}
             >
               <Text style={styles.textButton}>
-                {hideId == null ? "ADD" : "UPDATE" }
+                {hideId == null ? "THÊM" : "CẬP NHẬT" }
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -444,7 +511,7 @@ const App = () => {
                     <TouchableOpacity
                       onPress={ () =>del_OD(item)}
                     >
-                      <Text style={styles.txt_delete}>Delete</Text>
+                      <Text style={styles.txt_delete}>XÓA</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -514,7 +581,7 @@ const App = () => {
               style={styles.btnContainer}
             >
               <Text style={styles.textButton}>
-                ADD OD
+                THÊM MÓN
               </Text>
             </TouchableOpacity>
 
@@ -596,6 +663,23 @@ const styles = StyleSheet.create({
 
   },
 
+  viewSanPham: {
+    marginTop: -5,
+    width: '100%',
+    height: 60,
+    // borderTopColor: 'black',
+    // borderWidth: 2,
+    backgroundColor: '#eeeeee',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+
+  },
+
+  btnSanPham: {
+    marginTop: -10,
+    width: '100%',
+  },
+
   sv_bottom: {
     bottom: 0,
     marginBottom : 50
@@ -603,7 +687,7 @@ const styles = StyleSheet.create({
 
   form:{
     padding: 15,
-    backgroundColor: "gray",
+    backgroundColor: "#eeeeee",
     marginTop: 20,
     height: 500
   },
@@ -675,6 +759,9 @@ const styles = StyleSheet.create({
   textButton: {
     padding: 15,
     backgroundColor: 'red',
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
     display: 'flex',
     textAlign : 'center',
     width: '100%',
@@ -682,9 +769,22 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
 
+  textSanPham: {
+    padding: 15,
+    backgroundColor: 'red',
+    display: 'flex',
+    color: 'white',
+    textAlign : 'center',
+    width: '100%',
+    marginTop: 15,
+    fontWeight: 'bold',
+    fontSize: 20,
+    borderRadius: 10
+  },
+
   label : {
     fontSize : 25,
-    color: '#ffff',
+    color: 'black',
     // backgroundColor : '#ffff',
     fontWeight : 'bold',
     textAlign : 'center'

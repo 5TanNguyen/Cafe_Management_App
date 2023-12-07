@@ -40,7 +40,7 @@ export default function TablesScreen({navigation}){
     }, [])
     const getList = () => {
         axios({
-            url: "http:/192.168.59.88:5555/dsban",
+            url: "http:/192.168.2.32:5555/dsban",
             method: "GET"
         }).then((res)=>{
             setList(res.data)
@@ -57,7 +57,7 @@ export default function TablesScreen({navigation}){
       setRefresh(true)
 
       axios({
-        url: "http:/192.168.59.88:5555/dsban",
+        url: "http:/192.168.2.32:5555/dsban",
         method: "GET"
         }).then((res)=>{
             setList(res.data)
@@ -75,7 +75,7 @@ export default function TablesScreen({navigation}){
     {
       const t_id = item.t_id;
     axios({
-      url: "http:/192.168.59.88:5555/getdondat?t_id=" + t_id,
+      url: "http:/192.168.2.32:5555/getdondat?t_id=" + t_id,
       method: "GET"
     }).then((res)=>{
       setOrder(res.data)
@@ -101,7 +101,7 @@ export default function TablesScreen({navigation}){
     const get_List_OD = (item)=>{
       const od_o_id = item.orderID;
       axios({
-        url: "http:/192.168.59.88:5555/chitietdondatt?o_id=" + od_o_id,
+        url: "http:/192.168.2.32:5555/chitietdondatt?o_id=" + od_o_id,
         method: "GET"
       }).then((res)=>{
         setList_OD(res.data)
@@ -148,7 +148,7 @@ export default function TablesScreen({navigation}){
         console.log(o_cost);
         console.log(order);
         axios({
-          url: "http:/192.168.59.88:5555/gopban",
+          url: "http:/192.168.2.32:5555/gopban",
           method: "POST",
           data : order,
           headers: {
@@ -176,7 +176,7 @@ export default function TablesScreen({navigation}){
   
       console.log(order);
       axios({
-        url: "http:/192.168.59.88:5555/thanhtoanmobile",
+        url: "http:/192.168.2.32:5555/thanhtoanmobile",
         method: "POST",
         data : order,
         headers: {
@@ -300,7 +300,7 @@ export default function TablesScreen({navigation}){
               style={styles.btnContainer}
             >
               <Text style={styles.textButton}>
-                Chuyển
+                GỘP
               </Text>
             </TouchableOpacity>
 
@@ -321,7 +321,7 @@ export default function TablesScreen({navigation}){
 
           <View style={styles.form}>
 
-            <Text style={ styles.label}>   CHI TIẾT ĐƠN ĐẶT</Text>
+            <Text style={ styles.label}>   THANH TOÁN</Text>
           
           <ScrollView>
 

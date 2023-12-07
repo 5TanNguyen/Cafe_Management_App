@@ -52,7 +52,7 @@ export default function ProfileScreen({navigation}){
     }, [])
     const getList = () => {
         axios({
-            url: "http:/192.168.59.88:5555/dsban",
+            url: "http:/192.168.2.32:5555/dsban",
             method: "GET"
         }).then((res)=>{
             setList(res.data)
@@ -69,7 +69,7 @@ export default function ProfileScreen({navigation}){
       setRefresh(true)
 
       axios({
-        url: "http:/192.168.59.88:5555/dsban",
+        url: "http:/192.168.2.32:5555/dsban",
         method: "GET"
         }).then((res)=>{
             setList(res.data)
@@ -133,7 +133,7 @@ export default function ProfileScreen({navigation}){
     {
       const u_id = 1;
     axios({
-      url: "http:/192.168.59.88:5555/getChamCong?u_id=" + u_id,
+      url: "http:/192.168.2.32:5555/getChamCong?u_id=" + u_id,
       method: "GET"
     }).then((res)=>{
       set_timekeeping(res.data)
@@ -145,7 +145,7 @@ export default function ProfileScreen({navigation}){
     const get_Wallet = () => {
       const u_id = 1;
       axios({
-          url: "http:/192.168.59.88:5555/getVi?u_id=" + u_id,
+          url: "http:/192.168.2.32:5555/getVi?u_id=" + u_id,
           method: "GET"
       }).then((res)=>{
           setWallet(res.data)
@@ -158,7 +158,7 @@ export default function ProfileScreen({navigation}){
   const get_Calendar = () => {
     const u_id = 1;
     axios({
-        url: "http:/192.168.59.88:5555/getLich?u_id=" + u_id,
+        url: "http:/192.168.2.32:5555/getLich?u_id=" + u_id,
         method: "GET"
     }).then((res)=>{
         set_calendar(res.data)
@@ -171,7 +171,7 @@ export default function ProfileScreen({navigation}){
   const get_Transaction = () => {
     const u_id = 1;
     axios({
-        url: "http:/192.168.59.88:5555/getPGD?u_id=" + u_id,
+        url: "http:/192.168.2.32:5555/getPGD?u_id=" + u_id,
         method: "GET"
     }).then((res)=>{
         set_transaction(res.data)
@@ -185,7 +185,7 @@ export default function ProfileScreen({navigation}){
     const u_id = 1;
     const cd_id = item.cd_id
     axios({
-        url: "http:/192.168.59.88:5555/dangkiLich?u_id=" + u_id + '&cd_id=' + cd_id,
+        url: "http:/192.168.2.32:5555/dangkiLich?u_id=" + u_id + '&cd_id=' + cd_id,
         method: "GET"
     }).then((res)=>{
         get_Calendar();
